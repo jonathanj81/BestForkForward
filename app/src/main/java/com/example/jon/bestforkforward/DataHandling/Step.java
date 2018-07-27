@@ -1,58 +1,73 @@
+
 package com.example.jon.bestforkforward.DataHandling;
 
-
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Step {
 
     @SerializedName("id")
-    private int step_id;
+    @Expose
+    private Integer id;
     @SerializedName("shortDescription")
+    @Expose
     private String shortDescription;
     @SerializedName("description")
+    @Expose
     private String description;
     @SerializedName("videoURL")
-    private String videoUrl;
+    @Expose
+    private String videoURL;
     @SerializedName("thumbnailURL")
-    private String thumbnailUrl;
+    @Expose
+    private String thumbnailURL;
 
-    public Step(int step_id, String shortDescription, String description, String videoUrl, String thumbnailUrl){
-        this.step_id = step_id;
+    public Step(Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+        this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
-        this.videoUrl = videoUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
-    public int getStep_id() {
-        return this.step_id;
+    public Integer getId() {
+        return id;
     }
-    public String getShortDescription(){
-        return this.shortDescription;
+
+    public void setId(Integer id) {
+        this.id = id;
     }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
     public String getDescription() {
-        return this.description;
-    }
-    public String getVideoUrl() {
-        return this.videoUrl;
-    }
-    public String getThumbnailUrl() {
-        return this.thumbnailUrl;
+        return description;
     }
 
-    public void setStep_id(int step_id){
-        this.step_id = step_id;
-    }
-    public void setShortDescription(String shortDescription){
-        this.shortDescription = shortDescription;
-    }
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
-    public void setVideoUrl(String videoUrl){
-        this.videoUrl = videoUrl;
+
+    public String getVideoURL() {
+        return videoURL;
     }
-    public void setThumbnailUrl(String thumbnailUrl){
-        this.thumbnailUrl = thumbnailUrl;
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
     }
+
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
+    }
+
 }

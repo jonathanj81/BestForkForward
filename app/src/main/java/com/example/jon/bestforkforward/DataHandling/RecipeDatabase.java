@@ -20,11 +20,8 @@ public abstract class RecipeDatabase extends RoomDatabase {
     public abstract RecipeDao mDao();
 
     private static RecipeDatabase mDB;
-    private static Context mContext;
 
     public synchronized static RecipeDatabase getDatabase(Context context) {
-        Log.i("AHDFJGHJADFJHJDFH", "Database checked get");
-        mContext = context;
         if (mDB == null) {
             mDB = buildDatabase(context);
             mDB.populateData();
@@ -34,33 +31,22 @@ public abstract class RecipeDatabase extends RoomDatabase {
 
     private static RecipeDatabase buildDatabase(final Context context) {
 
-        Log.i("AHDFJGHJADFJHJDFH", "Database building");
-
-        RecipeDatabase tempDB = Room.databaseBuilder(context, RecipeDatabase.class, "recipes")
+        return Room.databaseBuilder(context, RecipeDatabase.class, "recipes")
                 .fallbackToDestructiveMigration()
-                .addCallback(new Callback() {
-                    @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
-                        /*Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i("AHDFJGHJADFJHJDFH", "Database running");
-                                RetrofitFetcher.insertToDB(context);
-                            }
-                        }); */
-                    }
-                }).build();
-        return tempDB;
+                .build();
     }
 
     private void populateData() {
         Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                Log.i("AHDFJGHJADFJHJDFH", "Database running");
                 if (mDao().count() == 0) {
-                    RetrofitFetcher.insertToDB(mContext);
+                    Recipe[] recipes = RetrofitFetcher.getData();
+                    if (recipes != null && recipes.length > 0) {
+                        for (Recipe recipe : recipes) {
+                            mDao().insertRecipe(recipe);
+                        }
+                    }
                 }
             }
         });

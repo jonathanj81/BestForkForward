@@ -1,86 +1,83 @@
+
 package com.example.jon.bestforkforward.DataHandling;
 
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "recipe_table")
 public class Recipe {
 
     @PrimaryKey
     @SerializedName("id")
-    private int recipe_id;
-
+    @Expose
+    private Integer id;
     @SerializedName("name")
+    @Expose
     private String name;
     @SerializedName("ingredients")
-    private List<Ingredient> ingredients;
+    @Expose
+    private List<Ingredient> ingredients = null;
     @SerializedName("steps")
-    private List<Step> steps;
+    @Expose
+    private List<Step> steps = null;
     @SerializedName("servings")
-    private String servings;
+    @Expose
+    private Integer servings;
     @SerializedName("image")
+    @Expose
     private String image;
 
-    public Recipe(int recipe_id, String name, List<Ingredient> ingredients, List<Step> steps,
-                  String servings, String image){
-        this.recipe_id = recipe_id;
-        this.name = name;
-        this.ingredients = ingredients;
-        this.steps = steps;
-        this.servings = servings;
-        this.image = image;
+    public Integer getId() {
+        return id;
     }
 
-    public int getRecipe_id() {
-        return this.recipe_id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
-        return this.name;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return this.ingredients;
-    }
-
-    public List<Step> getSteps() {
-        return this.steps;
-    }
-
-    public String getServings() {
-        return this.servings;
-    }
-
-    public String getImage() {
-        return this.image;
-    }
-
-    public void setRecipe_id(int recipe_id) {
-        this.recipe_id = recipe_id;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
     }
 
     public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
-    public void setServings(String servings) {
+    public Integer getServings() {
+        return servings;
+    }
+
+    public void setServings(Integer servings) {
         this.servings = servings;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public void setImage(String image) {
         this.image = image;
     }
+
 }

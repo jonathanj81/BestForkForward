@@ -14,7 +14,7 @@ public class ListConverter {
         List<Ingredient> ingredients = new ArrayList<>();
 
         for (int i = 0; i < tempList.size(); i += 3){
-            Ingredient tempIngredient = new Ingredient(Integer.valueOf(tempList.get(i)),
+            Ingredient tempIngredient = new Ingredient(Float.valueOf(tempList.get(i)),
                     tempList.get(i+1),tempList.get(i+2));
             ingredients.add(tempIngredient);
         }
@@ -37,7 +37,7 @@ public class ListConverter {
         List<String> tempList = Arrays.asList(delimited.split("---"));
         List<Step> steps = new ArrayList<>();
 
-        for (int i = 0; i < tempList.size(); i += 5){
+        for (int i = 0; i < tempList.size()-5; i += 5){
             Step tempStep = new Step(Integer.valueOf(tempList.get(i)),
                     tempList.get(i+1),tempList.get(i+2), tempList.get(i+3),
                     tempList.get(i+4));
@@ -46,15 +46,17 @@ public class ListConverter {
         return steps;
     }
 
+    // gave me retrofit library lessons. thank you.
+
     @TypeConverter
     public static String stepListToString(List<Step> list) {
         StringBuilder temp = new StringBuilder();
         for (Step item : list){
-            temp.append(String.valueOf(item.getStep_id())).append("---")
+            temp.append(String.valueOf(item.getId())).append("---")
                     .append(item.getShortDescription()).append("---")
                     .append(item.getDescription()).append("---")
-                    .append(item.getVideoUrl()).append("---")
-                    .append(item.getThumbnailUrl()).append("---");
+                    .append(item.getVideoURL()).append("---")
+                    .append(item.getThumbnailURL()).append("---");
         }
         return temp.toString();
     }

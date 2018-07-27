@@ -1,43 +1,49 @@
+
 package com.example.jon.bestforkforward.DataHandling;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Ingredient {
 
     @SerializedName("quantity")
-    private int quantity;
+    @Expose
+    private Float quantity;
     @SerializedName("measure")
+    @Expose
     private String measure;
     @SerializedName("ingredient")
+    @Expose
     private String ingredient;
 
-    public Ingredient(int quantity, String measure, String ingredient){
-        this.ingredient = ingredient;
-        this.measure = measure;
+    public Ingredient(Float quantity, String measure, String ingredient) {
         this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
     }
 
-    public int getQuantity(){
-        return this.quantity;
+    public Float getQuantity() {
+        return quantity;
     }
 
-    public String getIngredient() {
-        return this.ingredient;
+    public void setQuantity(Float quantity) {
+        this.quantity = quantity;
     }
 
     public String getMeasure() {
-        return this.measure;
+        return measure;
     }
 
-    public void setQuantity(int quantity){
-        this.quantity = quantity;
-    }
-
-    public void setMeasure(String measure){
+    public void setMeasure(String measure) {
         this.measure = measure;
     }
 
-    public void setIngredient(String ingredient){
+    public String getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
     }
+
 }

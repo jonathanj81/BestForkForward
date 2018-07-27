@@ -13,10 +13,10 @@ import java.util.List;
 @Dao
 public interface RecipeDao {
 
-    @Query("SELECT * FROM recipe_table ORDER BY recipe_id")
+    @Query("SELECT * FROM recipe_table ORDER BY id")
     LiveData<List<Recipe>> getAllRecipes();
 
-    @Query("SELECT * FROM recipe_table WHERE recipe_id = :recipe_id LIMIT 1")
+    @Query("SELECT * FROM recipe_table WHERE id = :recipe_id LIMIT 1")
     LiveData<Recipe> getSingleRecipe(int recipe_id);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
