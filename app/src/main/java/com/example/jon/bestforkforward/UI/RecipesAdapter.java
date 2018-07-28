@@ -13,7 +13,7 @@ import com.example.jon.bestforkforward.R;
 
 import java.util.List;
 
-public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdapterViewHolder> {
+public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.MasterAdapterViewHolder> {
 
     private List<Recipe> mRecipes;
     private Context mContext;
