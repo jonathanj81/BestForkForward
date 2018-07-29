@@ -14,6 +14,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class MasterFragment extends Fragment {
         final RecyclerView recycler = rootView.findViewById(R.id.recyclerview);
         final MasterAdapter adapter = new MasterAdapter();
 
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
         recycler.setHasFixedSize(true);
         recycler.setAdapter(adapter);
 

@@ -3,9 +3,13 @@ package com.example.jon.bestforkforward.UI;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.jon.bestforkforward.DataHandling.Recipe;
@@ -17,6 +21,10 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
 
     private List<Recipe> mRecipes;
     private Context mContext;
+    private int mWidth;
+    //private final MasterAdapterOnClickHandler mClickHandler;
+    private LinearLayout lastClickedUp = null;
+    private ImageView lastClickedDown = null;
 
     @NonNull
     @Override
@@ -24,13 +32,30 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
         mContext = parent.getContext();
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.recipe_card_view, parent,false);
+        mWidth = mContext.getResources().getDisplayMetrics().widthPixels/2 - 32;
+        view.setLayoutParams(new RecyclerView.LayoutParams(mWidth, mWidth + 128));
         return new MasterAdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MasterAdapterViewHolder holder, int position) {
         holder.mName.setText(mRecipes.get(position).getName());
-        holder.mIngredient.setText(mRecipes.get(position).getIngredients().get(0).getIngredient());
+        holder.mServings.setText(String.valueOf(mRecipes.get(position).getServings()));
+        holder.mPreview.getLayoutParams().height = mWidth - 108;
+        switch (position){
+            case 0:
+                holder.mPreview.setImageResource(R.drawable.nutella);
+                break;
+            case 1:
+                holder.mPreview.setImageResource(R.drawable.chocolatebrownie);
+                break;
+            case 2:
+                holder.mPreview.setImageResource(R.drawable.yellowcake);
+                break;
+            case 3:
+                holder.mPreview.setImageResource(R.drawable.cheesecake);
+                break;
+        }
     }
 
     @Override
@@ -44,15 +69,57 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
         notifyDataSetChanged();
     }
 
-    public class MasterAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MasterAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView mName;
-        private TextView mIngredient;
+        private TextView mServings;
+        private ImageView mPreview;
 
         public MasterAdapterViewHolder(View itemView) {
             super(itemView);
-            mName = itemView.findViewById(R.id.card_recipe_name_textview);
-            mIngredient = itemView.findViewById(R.id.card_recipe_ingredient1_textview);
+            mName = itemView.findViewById(R.id.dessert_name_textview);
+            mServings = itemView.findViewById(R.id.dessert_servings_textview);
+            mPreview = itemView.findViewById(R.id.dessert_preview_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (lastClickedUp != null){
+                lastClickedUp.setVisibility(View.GONE);
+                lastClickedDown.setVisibility(View.VISIBLE);
+            }
+            Log.i("JAHSFHAJDFG", "onClick called");
+            lastClickedUp = v.findViewById(R.id.card_second_layout);
+            lastClickedDown = v.findViewById(R.id.dessert_preview_image);
+            lastClickedUp.setVisibility(View.VISIBLE);
+            lastClickedDown.setVisibility(View.GONE);
+
+            lastClickedUp.getLayoutParams().height = mWidth - 108;
+
+            Button ingredients = v.findViewById(R.id.ingredients_button);
+            Button instructions = v.findViewById(R.id.instructions_button);
+
+            ingredients.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            instructions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
+
+   // public interface MasterAdapterOnClickHandler {
+   //     void onClick(Recipe recipe);
+   // }
+
+   // public MasterAdapter(MasterAdapterOnClickHandler clickHandler) {
+   //     mClickHandler = clickHandler;
+   // }
 }
