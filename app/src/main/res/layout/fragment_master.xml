@@ -1,43 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fork_meal_table"
-            android:elevation="8dp"
-            android:fitsSystemWindows="true"
-            app:expandedTitleGravity="bottom|left"
-            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:statusBarScrim="@android:color/transparent">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme"/>
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="4dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-</android.support.design.widget.CoordinatorLayout>
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />

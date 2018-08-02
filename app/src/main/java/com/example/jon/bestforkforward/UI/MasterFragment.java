@@ -32,7 +32,7 @@ import java.util.List;
 
 public class MasterFragment extends Fragment {
 
-    private Typeface mMerienda;
+    private RecyclerView recycler;
 
     public MasterFragment() {
     }
@@ -42,7 +42,7 @@ public class MasterFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_master, container, false);
-        final RecyclerView recycler = rootView.findViewById(R.id.recyclerview);
+        recycler = rootView.findViewById(R.id.recyclerview);
         final MasterAdapter adapter = new MasterAdapter();
 
         recycler.setLayoutManager(new GridLayoutManager(getContext(),2));
@@ -57,11 +57,8 @@ public class MasterFragment extends Fragment {
             }
         });
 
-        final CollapsingToolbarLayout toolLayout = rootView.findViewById(R.id.toolbar_layout);
-        toolLayout.setCollapsedTitleTypeface(mMerienda);
-        toolLayout.setExpandedTitleTypeface(mMerienda);
-
-        AppBarLayout appBarLayout = rootView.findViewById(R.id.app_bar);
+        final CollapsingToolbarLayout toolLayout = getActivity().findViewById(R.id.toolbar_layout);
+        AppBarLayout appBarLayout = getActivity().findViewById(R.id.app_bar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -73,8 +70,11 @@ public class MasterFragment extends Fragment {
             }
         });
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.fork_meal_table);
+        toolLayout.setBackground(getResources().getDrawable(R.drawable.fork_meal_table));
+        final View view = getActivity().findViewById(R.id.scrim_gradient);
+        view.setVisibility(View.INVISIBLE);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fork_meal_table);
         Palette.from(bitmap).maximumColorCount(64).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
                 toolLayout.setStatusBarScrimColor(palette.getDarkMutedSwatch().getRgb());
@@ -85,11 +85,5 @@ public class MasterFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mMerienda = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Merienda-Regular.ttf");
     }
 }

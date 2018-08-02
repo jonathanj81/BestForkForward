@@ -1,7 +1,10 @@
 package com.example.jon.bestforkforward.UI;
 
+import android.app.Fragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,7 +92,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
                 lastClickedUp.setVisibility(View.GONE);
                 lastClickedDown.setVisibility(View.VISIBLE);
             }
-            Log.i("JAHSFHAJDFG", "onClick called");
             lastClickedUp = v.findViewById(R.id.card_second_layout);
             lastClickedDown = v.findViewById(R.id.dessert_preview_image);
             lastClickedUp.setVisibility(View.VISIBLE);
@@ -103,23 +105,31 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
             ingredients.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    AppCompatActivity activity = (AppCompatActivity)v.getContext();
+                    IngredientsFragment ingredientsFragment = new IngredientsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("recipe_id", getAdapterPosition()+1);
+                    ingredientsFragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, ingredientsFragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
             instructions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    AppCompatActivity activity = (AppCompatActivity)v.getContext();
+                    StepsFragment stepsFragment = new StepsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("recipe_id", getAdapterPosition()+1);
+                    stepsFragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, stepsFragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
         }
     }
-
-   // public interface MasterAdapterOnClickHandler {
-   //     void onClick(Recipe recipe);
-   // }
-
-   // public MasterAdapter(MasterAdapterOnClickHandler clickHandler) {
-   //     mClickHandler = clickHandler;
-   // }
 }
