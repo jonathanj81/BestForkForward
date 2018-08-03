@@ -1,6 +1,7 @@
 package com.example.jon.bestforkforward.UI;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapter
 
         @Override
         public void onClick(View v) {
-
+            FragmentManager fm = ((MainActivity)v.getContext()).getSupportFragmentManager();
+            VideoDialogFragment frag = VideoDialogFragment.
+                    newInstance(mSteps, getAdapterPosition());
+            frag.show(fm, "video_frag");
         }
     }
 }

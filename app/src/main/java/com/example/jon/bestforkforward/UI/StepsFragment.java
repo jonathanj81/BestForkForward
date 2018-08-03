@@ -27,7 +27,7 @@ import com.example.jon.bestforkforward.R;
 public class StepsFragment extends Fragment {
 
     private int mRecipeID;
-    private String dessertName;
+    public static String dessertName;
 
     public StepsFragment() {
     }
