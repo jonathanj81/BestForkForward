@@ -19,6 +19,9 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipe_table WHERE id = :recipe_id LIMIT 1")
     LiveData<Recipe> getSingleRecipe(int recipe_id);
 
+    @Query("SELECT * FROM recipe_table WHERE id = :recipe_id LIMIT 1")
+    Recipe getSingleWidgetRecipe(int recipe_id);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insertRecipe(Recipe recipe);
 

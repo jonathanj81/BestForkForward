@@ -25,7 +25,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
     private List<Recipe> mRecipes;
     private Context mContext;
     private int mWidth;
-    //private final MasterAdapterOnClickHandler mClickHandler;
     private LinearLayout lastClickedUp = null;
     private ImageView lastClickedDown = null;
 

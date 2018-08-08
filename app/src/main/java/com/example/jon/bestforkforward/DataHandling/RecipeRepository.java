@@ -22,6 +22,9 @@ public class RecipeRepository {
     public LiveData<Recipe> getSingleRecipe(int id){
         return mDao.getSingleRecipe(id);
     }
+    public Recipe getSingleWidgetRecipe(int id){
+        return mDao.getSingleWidgetRecipe(id);
+    }
 
     public void updateRecipe(Recipe recipe){
         mDao.updateRecipe(recipe);

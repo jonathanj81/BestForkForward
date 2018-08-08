@@ -13,7 +13,7 @@ import com.example.jon.bestforkforward.NetworkUtils.RetrofitFetcher;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class}, version = 2, exportSchema = false)
 @TypeConverters(ListConverter.class)
 public abstract class RecipeDatabase extends RoomDatabase {
 
