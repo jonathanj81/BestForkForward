@@ -19,6 +19,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapter
 
     private List<Step> mSteps;
 
+    private static final String VIDEO_FRAGMENT_NAME = "video_frag";
+
     @NonNull
     @Override
     public StepsAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,11 +32,17 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapter
     @Override
     public void onBindViewHolder(@NonNull StepsAdapterViewHolder holder, int position) {
 
-        holder.mNumber.setText(String.valueOf(mSteps.get(position).getId()+1));
+        if (position != 0) {
+            holder.mNumber.setText(String.valueOf(mSteps.get(position).getId()));
+        } else {
+            holder.mNumber.setText("-");
+        }
         holder.mShortDescription.setText(mSteps.get(position).getShortDescription());
         String url = mSteps.get(position).getVideoURL();
         if (url == null || url.isEmpty()){
             holder.mVideoIcon.setVisibility(View.INVISIBLE);
+        } else {
+            holder.mVideoIcon.setVisibility(View.VISIBLE);
         }
     }
 
@@ -68,7 +76,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapter
             FragmentManager fm = ((MainActivity)v.getContext()).getSupportFragmentManager();
             VideoDialogFragment frag = VideoDialogFragment.
                     newInstance(mSteps, getAdapterPosition());
-            frag.show(fm, "video_frag");
+            frag.show(fm, VIDEO_FRAGMENT_NAME);
         }
     }
 }

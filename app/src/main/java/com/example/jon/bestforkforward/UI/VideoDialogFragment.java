@@ -3,6 +3,7 @@ package com.example.jon.bestforkforward.UI;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jon.bestforkforward.DataHandling.Step;
@@ -39,6 +41,9 @@ public class VideoDialogFragment extends DialogFragment {
     private static List<Step> mSteps;
     private int mPosition;
 
+    private static final String POSITION_KEY = "position";
+    private static final String VIDEO_FRAGMENT_NAME = "video_frag";
+
     public VideoDialogFragment(){
 
     }
@@ -47,48 +52,61 @@ public class VideoDialogFragment extends DialogFragment {
         mSteps = steps;
         VideoDialogFragment frag = new VideoDialogFragment();
         Bundle args = new Bundle();
-        args.putInt("position", pos);
+        args.putInt(POSITION_KEY, pos);
         frag.setArguments(args);
         return frag;
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.video_dialog_fragment, container);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPosition = getArguments().getInt("position");
+        mPosition = getArguments().getInt(POSITION_KEY);
 
-        TextView title = view.findViewById(R.id.dialog_title);
-        String titleText = StepsFragment.dessertName;
-        if (mPosition > 0){
-            titleText = titleText + ": Step " + mPosition;
-        }
-        title.setText(titleText);
-
-        TextView instructionView = view.findViewById(R.id.step_long_instruction);
-        String instruction = mSteps.get(mPosition).getDescription();
-        if (mPosition != 0){
-            instruction = instruction.substring(3);
-        }
-        String videoURL = mSteps.get(mPosition).getVideoURL();
-        instructionView.setText(instruction);
+        setFragText(view);
+        initializeButtons(view);
 
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
+        String videoURL = mSteps.get(mPosition).getVideoURL();
         mPlayerView = view.findViewById(R.id.exoplayer_view);
-        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(),R.drawable.nutella));
-        if (!(videoURL == null || videoURL.isEmpty())){
-            initializePlayer(Uri.parse(videoURL));
-        }
+        ImageView defaultArtwork = view.findViewById(R.id.video_dialog_default_artwork);
+        TextView defaultText = view.findViewById(R.id.no_video_textview);
 
+        if (!(videoURL == null || videoURL.isEmpty())){
+            defaultArtwork.setVisibility(View.INVISIBLE);
+            defaultText.setVisibility(View.INVISIBLE);
+            mPlayerView.setVisibility(View.VISIBLE);
+            initializePlayer(Uri.parse(videoURL));
+        } else {
+            defaultArtwork.setVisibility(View.VISIBLE);
+            defaultText.setVisibility(View.VISIBLE);
+            mPlayerView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        super.onResume();
+    }
+
+    private void initializeButtons(View view){
         ImageButton close = view.findViewById(R.id.video_dialog_close_button);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,10 +125,7 @@ public class VideoDialogFragment extends DialogFragment {
                     mPosition = 0;
                 }
                 dismissCurrent();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                VideoDialogFragment frag = VideoDialogFragment.
-                        newInstance(mSteps, mPosition);
-                frag.show(fm, "video_frag");
+                startNewVideoFragment();
             }
         });
 
@@ -124,25 +139,32 @@ public class VideoDialogFragment extends DialogFragment {
                     mPosition = mSteps.size()-1;
                 }
                 dismissCurrent();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                VideoDialogFragment frag = VideoDialogFragment.
-                        newInstance(mSteps, mPosition);
-                frag.show(fm, "video_frag");
+                startNewVideoFragment();
             }
         });
     }
 
-    @Override
-    public void onResume() {
+    private void startNewVideoFragment(){
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        VideoDialogFragment frag = VideoDialogFragment.
+                newInstance(mSteps, mPosition);
+        frag.show(fm, VIDEO_FRAGMENT_NAME);
+    }
 
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+    private void setFragText(View view){
+        TextView title = view.findViewById(R.id.dialog_title);
+        String titleText = StepsFragment.dessertName;
+        if (mPosition > 0){
+            titleText = titleText + getResources().getString(R.string.video_title_step) + mPosition;
+        }
+        title.setText(titleText);
 
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        super.onResume();
+        TextView instructionView = view.findViewById(R.id.step_long_instruction);
+        String instruction = mSteps.get(mPosition).getDescription();
+        if (mPosition != 0){
+            instruction = instruction.substring(3);
+        }
+        instructionView.setText(instruction);
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -177,7 +199,7 @@ public class VideoDialogFragment extends DialogFragment {
     }
 
     private void dismissCurrent(){
-        Fragment current = getActivity().getSupportFragmentManager().findFragmentByTag("video_frag");
+        Fragment current = getActivity().getSupportFragmentManager().findFragmentByTag(VIDEO_FRAGMENT_NAME);
         if (current != null) {
             VideoDialogFragment df = (VideoDialogFragment) current;
             df.dismiss();

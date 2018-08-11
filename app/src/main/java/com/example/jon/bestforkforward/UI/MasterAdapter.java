@@ -1,12 +1,11 @@
 package com.example.jon.bestforkforward.UI;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +22,30 @@ import java.util.List;
 public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdapterViewHolder> {
 
     private List<Recipe> mRecipes;
-    private Context mContext;
     private int mWidth;
     private LinearLayout lastClickedUp = null;
     private ImageView lastClickedDown = null;
+    private boolean isLand = false;
+
+    private static final String GENERIC_KEY_STRING = "recipe_id";
 
     @NonNull
     @Override
     public MasterAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        mContext = parent.getContext();
+        Context context = parent.getContext();
+        int divisor = 2;
+        int subtractor = 32;
+        int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        View view = LayoutInflater.from(context).inflate(R.layout.recipe_card_view, parent,false);
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.recipe_card_view, parent,false);
-        mWidth = mContext.getResources().getDisplayMetrics().widthPixels/2 - 32;
+        isLand = (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (isLand){
+            divisor = 4;
+            subtractor = 16;
+            TextView dessert = view.findViewById(R.id.dessert_name_textview);
+            dessert.setTextAppearance(context,android.R.style.TextAppearance_DeviceDefault_Medium);
+        }
+        mWidth = screenWidth/divisor - subtractor;
         view.setLayoutParams(new RecyclerView.LayoutParams(mWidth, mWidth + 128));
         return new MasterAdapterViewHolder(view);
     }
@@ -101,16 +112,20 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
             Button ingredients = v.findViewById(R.id.ingredients_button);
             Button instructions = v.findViewById(R.id.instructions_button);
 
+            final int containerID = isLand ? R.id.container_right : R.id.container;
+
             ingredients.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MainActivity.stateID = getAdapterPosition()+1;
+                    MainActivity.isInstructions = false;
                     AppCompatActivity activity = (AppCompatActivity)v.getContext();
                     IngredientsFragment ingredientsFragment = new IngredientsFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("recipe_id", getAdapterPosition()+1);
+                    bundle.putInt(GENERIC_KEY_STRING, MainActivity.stateID);
                     ingredientsFragment.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, ingredientsFragment)
+                            .replace(containerID, ingredientsFragment)
                             .addToBackStack(null)
                             .commit();
                 }
@@ -118,13 +133,15 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
             instructions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MainActivity.stateID = getAdapterPosition()+1;
+                    MainActivity.isInstructions = true;
                     AppCompatActivity activity = (AppCompatActivity)v.getContext();
                     StepsFragment stepsFragment = new StepsFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("recipe_id", getAdapterPosition()+1);
+                    bundle.putInt(GENERIC_KEY_STRING, MainActivity.stateID);
                     stepsFragment.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, stepsFragment)
+                            .replace(containerID, stepsFragment)
                             .addToBackStack(null)
                             .commit();
                 }

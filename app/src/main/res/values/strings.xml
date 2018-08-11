@@ -2,4 +2,21 @@
     <string name="app_name">Best Fork Forward</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="video_title_step">: Step\u0020</string>
+
+    <string name="collapsed_title_text">Best Fork Forward</string>
+    <string name="expanded_title_text">On the Menu: %1$s</string>
+    <string name="default_expanded_text">desserts</string>
+
+    <string name="today_recipe">Today\'s Recipe</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
+
+    <string name="main_menu">Main Menu</string>
+
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+
+    <string name="no_video">No video available for this step.</string>
 </resources>

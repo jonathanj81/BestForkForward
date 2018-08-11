@@ -2,6 +2,8 @@ package com.example.jon.bestforkforward.UI;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.jon.bestforkforward.DataHandling.IngredientsViewModel;
 import com.example.jon.bestforkforward.DataHandling.IngredientsViewModelFactory;
@@ -29,6 +32,9 @@ public class StepsFragment extends Fragment {
 
     private int mRecipeID;
     public static String dessertName;
+
+    private static final String GENERIC_KEY_STRING = "recipe_id";
+    private static final String PREFS_MAIN_KEY = "recipe_id_main_memory";
 
     public StepsFragment() {
     }
@@ -48,11 +54,17 @@ public class StepsFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            mRecipeID = bundle.getInt("recipe_id", 0);
+            mRecipeID = bundle.getInt(GENERIC_KEY_STRING, 1);
         }
+
+        SharedPreferences prefs = getContext().getSharedPreferences(PREFS_MAIN_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(GENERIC_KEY_STRING, mRecipeID);
+        editor.apply();
 
         final CollapsingToolbarLayout toolLayout = getActivity().findViewById(R.id.toolbar_layout);
         final View view = getActivity().findViewById(R.id.scrim_gradient);
+        final TextView titleView = getActivity().findViewById(R.id.toolbar_title_textview);
 
         IngredientsViewModel viewModel = ViewModelProviders.of(this,
                 new IngredientsViewModelFactory(getContext(), mRecipeID)).get(IngredientsViewModel.class);
@@ -67,10 +79,12 @@ public class StepsFragment extends Fragment {
                 appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
                     @Override
                     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                        if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                            toolLayout.setTitle("Best Fork Forward");
-                        } else {
-                            toolLayout.setTitle("Best Fork Forward: " + dessertName);
+                        if (getActivity() != null && isAdded()) {
+                            if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+                                titleView.setText(getString(R.string.collapsed_title_text));
+                            } else {
+                                titleView.setText(getString(R.string.expanded_title_text, dessertName));
+                            }
                         }
                     }
                 });
@@ -78,9 +92,12 @@ public class StepsFragment extends Fragment {
         });
 
         Palette.from(getBitmap(mRecipeID)).maximumColorCount(64).generate(new Palette.PaletteAsyncListener() {
-            public void onGenerated(Palette palette) {
-                toolLayout.setStatusBarScrimColor(palette.getDarkMutedSwatch().getRgb());
-                recycler.setBackgroundColor(palette.getDarkMutedSwatch().getRgb());
+            public void onGenerated(@NonNull Palette palette) {
+                Palette.Swatch swatch = palette.getDarkMutedSwatch();
+                if (swatch != null) {
+                    toolLayout.setStatusBarScrimColor(swatch.getRgb());
+                    recycler.setBackgroundColor(swatch.getRgb());
+                }
                 view.setVisibility(View.VISIBLE);
             }
         });

@@ -9,4 +9,18 @@
         <item name="android:fitsSystemWindows">true</item>
     </style>
 
+    <style name="RecipeButtonTheme">
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/large_margin</item>
+        <item name="android:layout_marginBottom">@dimen/large_margin</item>
+        <item name="android:layout_marginStart">@dimen/grande_margin</item>
+        <item name="android:layout_marginEnd">@dimen/grande_margin</item>
+    </style>
+
 </resources>

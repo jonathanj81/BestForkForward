@@ -11,12 +11,12 @@
         android:id="@+id/ingredient_quantity"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/quantity_shape"
         android:textColor="@android:color/white"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/large_margin"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
     <TextView

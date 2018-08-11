@@ -14,10 +14,13 @@ import com.example.jon.bestforkforward.R;
 import java.util.List;
 
 public class RecipeWidgetService extends RemoteViewsService {
+
+    private static final String GENERIC_KEY_STRING = "recipe_id";
+
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-        int id = intent.getExtras().getInt("recipe_id");
+        int id = intent.getExtras().getInt(GENERIC_KEY_STRING);
         return new RecipeRemoteViewsFactory(this.getApplicationContext(), id);
     }
 
@@ -70,10 +73,18 @@ public class RecipeWidgetService extends RemoteViewsService {
 
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.small_ingredients_list_item);
 
-            String quantity = mIngredients.get(position).getQuantity().toString() + " ";
-            String measure = mIngredients.get(position).getMeasure() + " ";
+            Float quantity = mIngredients.get(position).getQuantity();
+            String quantityS;
+            int floorQuantity = (int)Math.floor(quantity);
+            if (floorQuantity == quantity){
+                quantityS = String.valueOf(floorQuantity);
+            }else {
+                quantityS = String.valueOf(quantity);
+            }
+
+            String measure = " " + mIngredients.get(position).getMeasure() + " ";
             String description = mIngredients.get(position).getIngredient();
-            views.setTextViewText(R.id.small_ingredients_textview, quantity + measure + description);
+            views.setTextViewText(R.id.small_ingredients_textview, quantityS + measure + description);
 
             return views;
         }

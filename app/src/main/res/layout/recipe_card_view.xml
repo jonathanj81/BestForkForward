@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="4dp"
     app:cardUseCompatPadding="true"
-    android:layout_margin="4dp">
+    android:layout_margin="@dimen/medium_margin">
 
     <LinearLayout
         android:id="@+id/card_first_layout"
@@ -24,37 +24,13 @@
 
             <Button
                 android:id="@+id/ingredients_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:padding="4dp"
-                android:text="Ingredients"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@android:color/white"
-                android:background="#486FAB"/>
+                style="@style/RecipeButtonTheme"
+                android:text="@string/ingredients" />
 
             <Button
                 android:id="@+id/instructions_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:padding="4dp"
-                android:text="Instructions"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@android:color/white"
-                android:background="#486FAB"/>
+                style="@style/RecipeButtonTheme"
+                android:text="@string/instructions" />
 
         </LinearLayout>
 

@@ -58,14 +58,18 @@ public class MasterFragment extends Fragment {
         });
 
         final CollapsingToolbarLayout toolLayout = getActivity().findViewById(R.id.toolbar_layout);
+        final TextView titleView = getActivity().findViewById(R.id.toolbar_title_textview);
         AppBarLayout appBarLayout = getActivity().findViewById(R.id.app_bar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0){
-                    toolLayout.setTitle("Best Fork Forward");
-                } else {
-                    toolLayout.setTitle("Best Fork Forward: desserts");
+                if (getActivity() != null && isAdded()) {
+                    if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+                        titleView.setText(getString(R.string.collapsed_title_text));
+                    } else {
+                        titleView.setText(getString(R.string.expanded_title_text,
+                                getString(R.string.default_expanded_text)));
+                    }
                 }
             }
         });
@@ -76,11 +80,12 @@ public class MasterFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fork_meal_table);
         Palette.from(bitmap).maximumColorCount(64).generate(new Palette.PaletteAsyncListener() {
-            public void onGenerated(Palette palette) {
-                toolLayout.setStatusBarScrimColor(palette.getDarkMutedSwatch().getRgb());
-                toolLayout.setExpandedTitleColor(getResources().getColor(android.R.color.white));
-                toolLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
-                recycler.setBackgroundColor(palette.getDarkMutedSwatch().getRgb());
+            public void onGenerated(@NonNull Palette palette) {
+                Palette.Swatch swatch = palette.getDarkMutedSwatch();
+                if (swatch != null) {
+                    toolLayout.setStatusBarScrimColor(swatch.getRgb());
+                    recycler.setBackgroundColor(swatch.getRgb());
+                }
             }
         });
 

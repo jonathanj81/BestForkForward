@@ -1,5 +1,6 @@
 package com.example.jon.bestforkforward.Widget;
 
+import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -15,6 +16,8 @@ import android.widget.RemoteViews;
 import com.example.jon.bestforkforward.R;
 import com.example.jon.bestforkforward.UI.MainActivity;
 
+import retrofit2.http.GET;
+
 /**
  * Implementation of App Widget functionality.
  */
@@ -22,6 +25,8 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     private static int mRecipeId;
     private Context mContext;
+    private static final String GENERIC_KEY_STRING = "recipe_id";
+    private static final String PREFS_WIDGET_KEY = "recipe_id_widget_memory";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -34,7 +39,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         } else {
             views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider_long);
             Intent intent = new Intent(context, RecipeWidgetService.class);
-            intent.putExtra("recipe_id", mRecipeId);
+            intent.putExtra(GENERIC_KEY_STRING, mRecipeId);
             views.setRemoteAdapter(R.id.widget_ingredients_listview, intent);
         }
         switch (mRecipeId) {
@@ -55,7 +60,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         }
 
         Intent toInstructions = new Intent(context, MainActivity.class);
-        toInstructions.putExtra("recipe_id", mRecipeId);
+        toInstructions.putExtra(GENERIC_KEY_STRING, mRecipeId);
         toInstructions.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, toInstructions, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
@@ -91,17 +96,17 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     }
 
     private void getTodaysId() {
-        SharedPreferences prefs = mContext.getSharedPreferences("recipe_id_memory", Context.MODE_PRIVATE);
-        if (!prefs.contains("recipe_id")) {
+        SharedPreferences prefs = mContext.getSharedPreferences(PREFS_WIDGET_KEY, Context.MODE_PRIVATE);
+        if (!prefs.contains(GENERIC_KEY_STRING)) {
             mRecipeId = 1;
         } else {
-            mRecipeId = prefs.getInt("recipe_id", 0) + 1;
+            mRecipeId = prefs.getInt(GENERIC_KEY_STRING, 0) + 1;
         }
         if (mRecipeId > 4) {
             mRecipeId = 1;
         }
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("recipe_id", mRecipeId);
+        editor.putInt(GENERIC_KEY_STRING, mRecipeId);
         editor.apply();
     }
 }

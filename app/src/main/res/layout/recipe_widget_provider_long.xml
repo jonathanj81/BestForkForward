@@ -17,9 +17,9 @@
             android:id="@+id/widget_title_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_marginStart="2dp"
-            android:text="Today's Recipe"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:text="@string/today_recipe"
             android:layout_gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@android:color/white"
@@ -29,7 +29,7 @@
             android:id="@+id/widget_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_margin="@dimen/medium_margin"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/widget_background"
             android:padding="2dp"
@@ -41,7 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="@dimen/medium_margin"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -50,9 +50,9 @@
             android:id="@+id/widget_ingredients_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_marginStart="2dp"
-            android:text="Ingredients"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:text="@string/ingredients"
             android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@android:color/white"
@@ -62,7 +62,7 @@
             android:id="@+id/widget_ingredients_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp" />
+            android:layout_margin="@dimen/small_margin" />
     </LinearLayout>
 
 </LinearLayout>
