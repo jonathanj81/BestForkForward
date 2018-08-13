@@ -65,7 +65,7 @@
                         android:layout_gravity="bottom|start"
                         android:layout_marginStart="56dp"
                         android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                         android:textColor="@android:color/white" />
                 </android.support.design.widget.CollapsingToolbarLayout>
             </android.support.design.widget.AppBarLayout>

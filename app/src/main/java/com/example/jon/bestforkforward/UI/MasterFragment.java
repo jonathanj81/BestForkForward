@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jon.bestforkforward.DataHandling.Recipe;
@@ -74,9 +75,11 @@ public class MasterFragment extends Fragment {
             }
         });
 
-        toolLayout.setBackground(getResources().getDrawable(R.drawable.fork_meal_table));
         final View view = getActivity().findViewById(R.id.scrim_gradient);
         view.setVisibility(View.INVISIBLE);
+
+        ((ImageView)getActivity().findViewById(R.id.test_toolbar_imageview))
+                .setImageResource(R.drawable.fork_meal_table);
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fork_meal_table);
         Palette.from(bitmap).maximumColorCount(64).generate(new Palette.PaletteAsyncListener() {

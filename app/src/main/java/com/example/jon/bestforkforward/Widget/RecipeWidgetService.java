@@ -16,11 +16,13 @@ import java.util.List;
 public class RecipeWidgetService extends RemoteViewsService {
 
     private static final String GENERIC_KEY_STRING = "recipe_id";
+    private long lastChange = 0;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
         int id = intent.getExtras().getInt(GENERIC_KEY_STRING);
+        Log.i("GET-FACTORY", ": "+ id);
         return new RecipeRemoteViewsFactory(this.getApplicationContext(), id);
     }
 
@@ -33,7 +35,9 @@ public class RecipeWidgetService extends RemoteViewsService {
 
         public RecipeRemoteViewsFactory(Context context, int recipeId){
             mContext = context;
+            Log.i("FACTO-CONST", ": "+ recipeId);
             mRecipeId = recipeId-1;
+            Log.i("FACTO-CONST-MINUS", ": "+ mRecipeId);
         }
 
         @Override
@@ -44,14 +48,20 @@ public class RecipeWidgetService extends RemoteViewsService {
         @Override
         public void onDataSetChanged() {
             mRepo = new RecipeRepository(mContext);
-
-            if (mRecipeId < 4){
-                mRecipeId++;
-            }else{
-                mRecipeId = 1;
+            Log.i("DATA-CHANGE-BEFORE", ": "+ mRecipeId);
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastChange > 1800000) {
+                if (mRecipeId < 4) {
+                    mRecipeId++;
+                } else {
+                    mRecipeId = 1;
+                }
+                lastChange = currentTime;
             }
+            Log.i("DATA-CHANGE-AFTER", ": "+ mRecipeId);
             Recipe recipe = mRepo.getSingleWidgetRecipe(mRecipeId);
             mIngredients = recipe.getIngredients();
+            Log.i("DATA-CHANGE-INGRED", ": "+ mIngredients);
         }
 
         @Override
@@ -72,6 +82,9 @@ public class RecipeWidgetService extends RemoteViewsService {
         public RemoteViews getViewAt(int position) {
 
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.small_ingredients_list_item);
+
+            Log.i("GET-VIEW-INGRED", ": "+ mIngredients);
+            Log.i("GET-VIEW-ID", ": "+ mRecipeId);
 
             Float quantity = mIngredients.get(position).getQuantity();
             String quantityS;

@@ -37,7 +37,6 @@ public class ListConverter {
     public static List<Step> stepStringToList(String delimited) {
         List<String> tempList = new ArrayList<>(Arrays.asList(delimited.split("-{3}")));
         tempList.add("");
-        Log.i("TOLIST AFTER SPLIT", tempList.toString());
         List<Step> steps = new ArrayList<>();
 
         for (int i = 0; i < tempList.size()-4; i += 5){
@@ -45,11 +44,6 @@ public class ListConverter {
                     tempList.get(i+1),tempList.get(i+2), tempList.get(i+3),
                     tempList.get(i+4));
             steps.add(tempStep);
-            Log.i("EACH STEP AS ADDED ID", tempList.get(i));
-            Log.i("EACH STEP AS ADDED SD", tempList.get(i+1));
-            Log.i("EACH STEP AS ADDED D", tempList.get(i+2));
-            Log.i("EACH STEP AS ADDED VU", tempList.get(i+3));
-            Log.i("EACH STEP AS ADDED TU", tempList.get(i+4));
         }
         return steps;
     }
@@ -64,7 +58,6 @@ public class ListConverter {
                     .append(item.getVideoURL()).append("---")
                     .append(item.getThumbnailURL()).append("---");
         }
-        Log.i("MAKING STRING", temp.toString());
         return temp.toString();
     }
 }

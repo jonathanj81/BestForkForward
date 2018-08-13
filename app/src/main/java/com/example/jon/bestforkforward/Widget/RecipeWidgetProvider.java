@@ -33,15 +33,22 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         RemoteViews views;
         if (width < 200) {
             views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
         } else {
-            views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider_long);
+            if (height < 100) {
+                views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider_long);
+            } else {
+                views = new RemoteViews(context.getPackageName(),R.layout.recipe_widget_provider_long_tall);
+            }
             Intent intent = new Intent(context, RecipeWidgetService.class);
+            Log.i("UPDATE,TO-SERVICE", ": "+ mRecipeId);
             intent.putExtra(GENERIC_KEY_STRING, mRecipeId);
             views.setRemoteAdapter(R.id.widget_ingredients_listview, intent);
         }
+        Log.i("UPDATE,BEFORE-IMAGE", ": "+ mRecipeId);
         switch (mRecipeId) {
             case 1:
                 views.setImageViewResource(R.id.widget_image, R.drawable.nutella);
@@ -65,15 +72,15 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, toInstructions, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
 
-        appWidgetManager.updateAppWidget(appWidgetId, null);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_ingredients_listview);
         appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_ingredients_listview);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         mContext = context;
         getTodaysId();
+        Log.i("ON-UPDATE,AFTER-TODAY", ": "+ mRecipeId);
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -91,6 +98,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        Log.i("OPTIONS-CHANGED", ": "+ mRecipeId);
         updateAppWidget(context, appWidgetManager, appWidgetId);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
@@ -99,11 +107,14 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_WIDGET_KEY, Context.MODE_PRIVATE);
         if (!prefs.contains(GENERIC_KEY_STRING)) {
             mRecipeId = 1;
+            Log.i("TODAY-ID,FIRST-PREFS", ": "+ mRecipeId);
         } else {
             mRecipeId = prefs.getInt(GENERIC_KEY_STRING, 0) + 1;
+            Log.i("TODAY-ID, AFTER-PREFS", ": "+ mRecipeId);
         }
         if (mRecipeId > 4) {
             mRecipeId = 1;
+            Log.i("TODAY-ID,OVER-FOUR", ": "+ mRecipeId);
         }
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(GENERIC_KEY_STRING, mRecipeId);

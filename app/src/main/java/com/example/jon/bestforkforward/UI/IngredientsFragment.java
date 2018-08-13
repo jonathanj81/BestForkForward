@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jon.bestforkforward.DataHandling.IngredientsViewModel;
@@ -80,7 +81,8 @@ public class IngredientsFragment extends Fragment {
             public void onChanged(@Nullable Recipe recipe) {
                 adapter.setIngredients(recipe.getIngredients());
                 dessertName = recipe.getName();
-                toolLayout.setBackground(new BitmapDrawable(getResources(), getBitmap(mRecipeID)));
+                ((ImageView)getActivity().findViewById(R.id.test_toolbar_imageview))
+                        .setImageBitmap(getBitmap(mRecipeID));
 
                 AppBarLayout appBarLayout = getActivity().findViewById(R.id.app_bar);
                 appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

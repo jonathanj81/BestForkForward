@@ -7,30 +7,38 @@
     app:cardUseCompatPadding="true"
     android:layout_margin="@dimen/medium_margin">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/card_first_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:padding="4dp"
         android:background="#E0E0E0">
 
         <LinearLayout
             android:id="@+id/card_second_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="@id/dessert_preview_image"
+            app:layout_constraintBottom_toBottomOf="@id/dessert_preview_image"
+            app:layout_constraintLeft_toLeftOf="@id/dessert_preview_image"
+            app:layout_constraintRight_toRightOf="@id/dessert_preview_image"
+            android:gravity="center"
             android:visibility="gone">
 
             <Button
                 android:id="@+id/ingredients_button"
                 style="@style/RecipeButtonTheme"
-                android:text="@string/ingredients" />
+                android:text="@string/ingredients"
+                android:layout_height="80dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
 
             <Button
                 android:id="@+id/instructions_button"
                 style="@style/RecipeButtonTheme"
-                android:text="@string/instructions" />
+                android:text="@string/instructions"
+                android:layout_height="80dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
 
         </LinearLayout>
 
@@ -39,12 +47,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:scaleType="centerCrop"/>
 
         <LinearLayout
-            android:id="@+id/recipe_card_bottom_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/dessert_preview_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:orientation="horizontal">
 
             <TextView
@@ -53,7 +67,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:layout_gravity="center_vertical"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:paddingStart="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"/>
 
             <FrameLayout
@@ -74,13 +90,13 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:background="@android:color/transparent"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textStyle="bold"/>
             </FrameLayout>
         </LinearLayout>
 
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
 

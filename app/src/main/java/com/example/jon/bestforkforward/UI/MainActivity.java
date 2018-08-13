@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -17,6 +21,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jon.bestforkforward.R;
 
@@ -63,6 +68,28 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                RoundedBitmapDrawable drawable;
+                Bitmap bitmap;
+                ImageView navImage = findViewById(R.id.nav_drawer_image);
+                switch (stateID){
+                    case 2:
+                        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.chocolatebrownie);
+                        break;
+                    case 3:
+                        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.yellowcake);
+                        break;
+                    case 4:
+                        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cheesecake);
+                        break;
+                    default:
+                        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.nutella);
+                }
+
+                drawable = RoundedBitmapDrawableFactory.create(getResources(),
+                        Bitmap.createScaledBitmap(bitmap, 480, 360, true));
+                drawable.setCircular(true);
+                drawable.setCornerRadius(Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2.0f);
+                navImage.setImageDrawable(drawable);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -126,7 +153,11 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setDisplayShowTitleEnabled(false);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        if (getResources().getConfiguration().smallestScreenWidthDp < 600) {
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        } else {
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_large);
+        }
     }
 
     private void openSmallPortrait(){

@@ -26,24 +26,25 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
     private LinearLayout lastClickedUp = null;
     private ImageView lastClickedDown = null;
     private boolean isLand = false;
+    private Context mContext;
 
     private static final String GENERIC_KEY_STRING = "recipe_id";
 
     @NonNull
     @Override
     public MasterAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        mContext = parent.getContext();
         int divisor = 2;
         int subtractor = 32;
-        int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-        View view = LayoutInflater.from(context).inflate(R.layout.recipe_card_view, parent,false);
+        int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+        View view = LayoutInflater.from(mContext).inflate(R.layout.recipe_card_view, parent,false);
 
-        isLand = (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        isLand = (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
         if (isLand){
             divisor = 4;
             subtractor = 16;
             TextView dessert = view.findViewById(R.id.dessert_name_textview);
-            dessert.setTextAppearance(context,android.R.style.TextAppearance_DeviceDefault_Medium);
+            dessert.setTextAppearance(mContext,android.R.style.TextAppearance_DeviceDefault_Medium);
         }
         mWidth = screenWidth/divisor - subtractor;
         view.setLayoutParams(new RecyclerView.LayoutParams(mWidth, mWidth + 128));
@@ -105,9 +106,13 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MasterAdap
             lastClickedUp = v.findViewById(R.id.card_second_layout);
             lastClickedDown = v.findViewById(R.id.dessert_preview_image);
             lastClickedUp.setVisibility(View.VISIBLE);
-            lastClickedDown.setVisibility(View.GONE);
 
-            lastClickedUp.getLayoutParams().height = mWidth - 108;
+            if (!(mContext.getResources().getConfiguration().smallestScreenWidthDp > 600)){
+                lastClickedUp.getLayoutParams().height = mWidth - 108;
+                lastClickedDown.setVisibility(View.GONE);
+            } else {
+                lastClickedDown.setVisibility(View.INVISIBLE);
+            }
 
             Button ingredients = v.findViewById(R.id.ingredients_button);
             Button instructions = v.findViewById(R.id.instructions_button);

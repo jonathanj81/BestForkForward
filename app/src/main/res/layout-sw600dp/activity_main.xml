@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
@@ -53,7 +52,7 @@
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme" />
 
-               <TextView
+                <TextView
                     android:id="@+id/toolbar_title_textview"
                     android:layout_width="match_parent"
                     android:layout_height="?android:actionBarSize"
@@ -61,7 +60,7 @@
                     android:gravity="center_vertical"
                     android:layout_marginStart="72dp"
                     android:textColor="@android:color/white"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
@@ -71,7 +70,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
