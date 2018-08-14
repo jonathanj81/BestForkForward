@@ -1,19 +1,12 @@
 package com.example.jon.bestforkforward.NetworkUtils;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.example.jon.bestforkforward.DataHandling.Recipe;
-import com.example.jon.bestforkforward.DataHandling.RecipeRepository;
 
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitFetcher {

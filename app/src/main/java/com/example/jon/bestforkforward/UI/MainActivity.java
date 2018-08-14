@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String GENERIC_KEY_STRING = "recipe_id";
     private static final String PREFS_MAIN_KEY = "recipe_id_main_memory";
+    private static final String INSTRUCTIONS_KEY = "which_one";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null){
             stateID = savedInstanceState.getInt(GENERIC_KEY_STRING);
-            isInstructions = savedInstanceState.getBoolean("which_one");
+            isInstructions = savedInstanceState.getBoolean(INSTRUCTIONS_KEY);
             recreate = true;
         }
 
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(GENERIC_KEY_STRING, stateID);
-        outState.putBoolean("which_one", isInstructions);
+        outState.putBoolean(INSTRUCTIONS_KEY, isInstructions);
         super.onSaveInstanceState(outState);
     }
 }

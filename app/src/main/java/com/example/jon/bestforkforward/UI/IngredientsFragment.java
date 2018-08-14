@@ -6,21 +6,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +25,7 @@ import android.widget.TextView;
 import com.example.jon.bestforkforward.DataHandling.IngredientsViewModel;
 import com.example.jon.bestforkforward.DataHandling.IngredientsViewModelFactory;
 import com.example.jon.bestforkforward.DataHandling.Recipe;
-import com.example.jon.bestforkforward.DataHandling.RecipeViewModel;
 import com.example.jon.bestforkforward.R;
-
-import java.util.List;
 
 public class IngredientsFragment extends Fragment {
 

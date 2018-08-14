@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.jon.bestforkforward.DataHandling.Ingredient;
 import com.example.jon.bestforkforward.DataHandling.Step;
 import com.example.jon.bestforkforward.R;
 

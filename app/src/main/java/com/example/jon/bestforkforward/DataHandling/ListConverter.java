@@ -1,7 +1,6 @@
 package com.example.jon.bestforkforward.DataHandling;
 
 import android.arch.persistence.room.TypeConverter;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;

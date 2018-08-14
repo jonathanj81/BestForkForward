@@ -1,22 +1,16 @@
 package com.example.jon.bestforkforward.Widget;
 
-import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.RemoteViews;
 
 import com.example.jon.bestforkforward.R;
 import com.example.jon.bestforkforward.UI.MainActivity;
-
-import retrofit2.http.GET;
 
 /**
  * Implementation of App Widget functionality.
@@ -44,11 +38,9 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
                 views = new RemoteViews(context.getPackageName(),R.layout.recipe_widget_provider_long_tall);
             }
             Intent intent = new Intent(context, RecipeWidgetService.class);
-            Log.i("UPDATE,TO-SERVICE", ": "+ mRecipeId);
             intent.putExtra(GENERIC_KEY_STRING, mRecipeId);
             views.setRemoteAdapter(R.id.widget_ingredients_listview, intent);
         }
-        Log.i("UPDATE,BEFORE-IMAGE", ": "+ mRecipeId);
         switch (mRecipeId) {
             case 1:
                 views.setImageViewResource(R.id.widget_image, R.drawable.nutella);
@@ -80,7 +72,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         mContext = context;
         getTodaysId();
-        Log.i("ON-UPDATE,AFTER-TODAY", ": "+ mRecipeId);
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -98,7 +89,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        Log.i("OPTIONS-CHANGED", ": "+ mRecipeId);
         updateAppWidget(context, appWidgetManager, appWidgetId);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
@@ -107,14 +97,11 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_WIDGET_KEY, Context.MODE_PRIVATE);
         if (!prefs.contains(GENERIC_KEY_STRING)) {
             mRecipeId = 1;
-            Log.i("TODAY-ID,FIRST-PREFS", ": "+ mRecipeId);
         } else {
             mRecipeId = prefs.getInt(GENERIC_KEY_STRING, 0) + 1;
-            Log.i("TODAY-ID, AFTER-PREFS", ": "+ mRecipeId);
         }
         if (mRecipeId > 4) {
             mRecipeId = 1;
-            Log.i("TODAY-ID,OVER-FOUR", ": "+ mRecipeId);
         }
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(GENERIC_KEY_STRING, mRecipeId);
