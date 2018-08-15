@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -38,15 +39,18 @@ public class VideoDialogFragment extends DialogFragment {
     private SimpleExoPlayerView mPlayerView;
     private static List<Step> mSteps;
     private int mPosition;
+    private String mVideoURL;
+    private boolean mReady = true;
+    private long mSeekPosition = 0;
 
     private static final String POSITION_KEY = "position";
     private static final String VIDEO_FRAGMENT_NAME = "video_frag";
 
-    public VideoDialogFragment(){
+    public VideoDialogFragment() {
 
     }
 
-    public static VideoDialogFragment newInstance(List<Step> steps, int pos){
+    public static VideoDialogFragment newInstance(List<Step> steps, int pos) {
         mSteps = steps;
         VideoDialogFragment frag = new VideoDialogFragment();
         Bundle args = new Bundle();
@@ -54,6 +58,15 @@ public class VideoDialogFragment extends DialogFragment {
         frag.setArguments(args);
         return frag;
 
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null){
+            mSeekPosition = savedInstanceState.getLong("video_position");
+            mReady = savedInstanceState.getBoolean("player_ready");
+        }
     }
 
     @Override
@@ -74,16 +87,19 @@ public class VideoDialogFragment extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        String videoURL = mSteps.get(mPosition).getVideoURL();
+        mVideoURL = mSteps.get(mPosition).getVideoURL();
         mPlayerView = view.findViewById(R.id.exoplayer_view);
         ImageView defaultArtwork = view.findViewById(R.id.video_dialog_default_artwork);
+        String thumbnail = mSteps.get(mPosition).getThumbnailURL();
+        if (!(thumbnail.isEmpty() || thumbnail.contains(".mp4"))) {
+            Picasso.with(getContext()).load(Uri.parse(thumbnail)).into(defaultArtwork);
+        }
         TextView defaultText = view.findViewById(R.id.no_video_textview);
 
-        if (!(videoURL == null || videoURL.isEmpty())){
+        if (!(mVideoURL == null || mVideoURL.isEmpty())) {
             defaultArtwork.setVisibility(View.INVISIBLE);
             defaultText.setVisibility(View.INVISIBLE);
             mPlayerView.setVisibility(View.VISIBLE);
-            initializePlayer(Uri.parse(videoURL));
         } else {
             defaultArtwork.setVisibility(View.VISIBLE);
             defaultText.setVisibility(View.VISIBLE);
@@ -92,7 +108,18 @@ public class VideoDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
     public void onResume() {
+        if ((Util.SDK_INT <= 23 || mExoPlayer == null)) {
+            initializePlayer();
+        }
 
         ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
 
@@ -104,7 +131,7 @@ public class VideoDialogFragment extends DialogFragment {
         super.onResume();
     }
 
-    private void initializeButtons(View view){
+    private void initializeButtons(View view) {
         ImageButton close = view.findViewById(R.id.video_dialog_close_button);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +144,7 @@ public class VideoDialogFragment extends DialogFragment {
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPosition < mSteps.size()-1){
+                if (mPosition < mSteps.size() - 1) {
                     mPosition++;
                 } else {
                     mPosition = 0;
@@ -131,10 +158,10 @@ public class VideoDialogFragment extends DialogFragment {
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPosition > 0){
+                if (mPosition > 0) {
                     mPosition--;
                 } else {
-                    mPosition = mSteps.size()-1;
+                    mPosition = mSteps.size() - 1;
                 }
                 dismissCurrent();
                 startNewVideoFragment();
@@ -142,65 +169,84 @@ public class VideoDialogFragment extends DialogFragment {
         });
     }
 
-    private void startNewVideoFragment(){
+    private void startNewVideoFragment() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         VideoDialogFragment frag = VideoDialogFragment.
                 newInstance(mSteps, mPosition);
         frag.show(fm, VIDEO_FRAGMENT_NAME);
     }
 
-    private void setFragText(View view){
+    private void setFragText(View view) {
         TextView title = view.findViewById(R.id.dialog_title);
         String titleText = StepsFragment.dessertName;
-        if (mPosition > 0){
+        if (mPosition > 0) {
             titleText = titleText + getResources().getString(R.string.video_title_step) + mPosition;
         }
         title.setText(titleText);
 
         TextView instructionView = view.findViewById(R.id.step_long_instruction);
         String instruction = mSteps.get(mPosition).getDescription();
-        if (mPosition != 0){
+        if (mPosition != 0) {
             instruction = instruction.substring(3);
         }
         instructionView.setText(instruction);
     }
 
-    private void initializePlayer(Uri mediaUri) {
-        if (mExoPlayer == null) {
-            // Create an instance of the ExoPlayer.
+    private void initializePlayer() {
+        if (mExoPlayer == null && !(mVideoURL == null || mVideoURL.isEmpty())) {
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
 
-            // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), "BestForkForward");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(mVideoURL), new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(mReady);
+            mExoPlayer.seekTo(mSeekPosition);
         }
     }
 
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mExoPlayer != null) {
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
             releasePlayer();
         }
     }
 
-    private void dismissCurrent(){
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    private void dismissCurrent() {
         Fragment current = getActivity().getSupportFragmentManager().findFragmentByTag(VIDEO_FRAGMENT_NAME);
         if (current != null) {
             VideoDialogFragment df = (VideoDialogFragment) current;
             df.dismiss();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        long playerPosition = mExoPlayer.getCurrentPosition();
+        outState.putLong("video_position", playerPosition);
+        boolean playerReady = mExoPlayer.getPlayWhenReady();
+        outState.putBoolean("player_ready", playerReady);
+
+        super.onSaveInstanceState(outState);
     }
 }
